@@ -1,0 +1,19 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "Full stack project with apollo-server-express as a server and next.js as fron-end, project written in typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xArthos/portfolio.git"
+  },
+  "author": "Giampaolo Nico Lo Cascio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xArthos/portfolio/issues"
+  },
+  "homepage": "https://github.com/xArthos/portfolio#readme"
+}
