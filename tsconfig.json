@@ -6,11 +6,15 @@
       "sourceMap": true,
       "target": "es6", 
       "outDir": "./dist",
+      "rootDir": "./src",
       "baseUrl": "./lib",
       "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "skipLibCheck": true,
       "lib": ["ES2015.Promise", "ES5"],
       "allowJs": false,
       "alwaysStrict": true,
+      "strict": true,
       "paths": {
         "@/*": ["./src/*"] 
       }

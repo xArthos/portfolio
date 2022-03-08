@@ -1,0 +1,82 @@
+# interface User {
+#     _id: string
+#     name: {
+#         firstName: string
+#         secondName: string
+#         lastName: string
+#         fullName: string
+#     }
+#     nickname: string
+#     type: string
+#     email: {
+#         currentEmail: string
+#         isVerified: boolean
+#         oldEmails: string[]
+#     }
+#     avatar: {
+#         source: string
+#         blockAvatar: {
+#             color: string
+#         }
+#     }
+# }
+
+type Query {
+    user: User!
+}
+
+type Mutation {
+    signUp(name: UserNameInput!, password: String!, email: String!, nickname: String!): User!
+}
+
+# Types
+type User {
+    _id: String!
+    name: UserName!
+    nickname: String!
+    type: String!
+    email: UserEmail!
+    avatar: UserAvatar!
+    createdAt: Int!
+}
+
+type UserName {
+    firstName: String!
+    secondName: String
+    lastName: String!
+    fullName: String!
+}
+
+type UserEmail {
+    currentEmail: String!
+    isVerified: Boolean!
+    oldEmails: [String]!
+}
+
+type UserAvatar {
+    source: String
+    blockAvatar: BlockAvatar
+}
+
+type BlockAvatar {
+    color: String
+}
+
+# Inputs
+input UserInput {
+    name: UserNameInput!
+    nickname: String!
+    password: String!
+    email: String!
+    avatar: UserAvatarInput
+}
+
+input UserNameInput {
+    firstName: String!
+    secondName: String
+    lastName: String!
+}
+
+input UserAvatarInput {
+    source: String
+}
