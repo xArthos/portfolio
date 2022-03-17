@@ -52,7 +52,8 @@ const startApolloServer = async (schema: any) => {
         `${process.env.CROSS_ORIGIN}`,
         'https://studio.apollographql.com',
         'https://studio.apollographql.com/sandbox/explorer',
-        'https://serverxarthos.vercel.app'
+        'https://serverxarthos.vercel.app',
+        'http://localhost:3000'
     ];
 
     const corsOptions: cors.CorsOptions = {
