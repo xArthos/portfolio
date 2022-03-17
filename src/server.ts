@@ -69,7 +69,11 @@ const startApolloServer = async (schema: any) => {
     consoleMessage('Server', 'startApolloServer', `Attempt to run server`);
 
     await server.start();
-    server.applyMiddleware({ app });
+    server.applyMiddleware({
+        app,
+        path: '/',
+        cors: false
+    });
 
     // Connect to MongoDb
     await initDb();
