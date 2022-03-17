@@ -59,7 +59,7 @@ const startApolloServer = async (schema: any) => {
         maxAge: 84600
     };
 
-    app.use(cors(corsOptions));
+    // app.use(cors(corsOptions));
     app.use(express.json());
 
     // Routes
@@ -72,7 +72,7 @@ const startApolloServer = async (schema: any) => {
     server.applyMiddleware({
         app,
         path: '/',
-        cors: false
+        cors: corsOptions
     });
 
     // Connect to MongoDb
