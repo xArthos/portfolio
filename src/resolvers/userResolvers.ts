@@ -7,6 +7,7 @@ import { db } from '../utils/mongoDb';
 
 export const getUser = async (_: any, { _id }: any) => {
     console.log(_id)
+    console.log(db)
     try {
         return await db.collection('users').findOne({ _id: new ObjectId(_id) });;
     } catch (error: any) {
