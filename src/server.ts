@@ -54,7 +54,7 @@ const startApolloServer = async (schema: any) => {
   const allowedOrigins = [process.env.CROSS_ORIGIN || 'http://localhost:3000', 'https://studio.apollographql.com'];
 
   const corsOptions = {
-    origin: allowedOrigins,
+    origin: 'https://studio.apollographql.com',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     preflightContinue: false,
     credentials: true,
