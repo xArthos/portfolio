@@ -44,7 +44,7 @@ const startApolloServer = async (schema: any) => {
       ApolloServerPluginDrainHttpServer({ httpServer }),
       process.env.NODE_ENV === 'production'
         ? ApolloServerPluginLandingPageProductionDefault({
-          graphRef: "my-graph-id@Graph-Portfolio",
+          graphRef: "Graph-Portfolio",
           footer: false
         })
         : ApolloServerPluginLandingPageLocalDefault({ footer: false })
