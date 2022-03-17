@@ -25,12 +25,6 @@ const startApolloServer = async (schema: any) => {
     const app: express.Application = (module.exports = express());
     const httpServer: http.Server = http.createServer(app);
 
-    // mongoose.connect(process.env.DB_CONN_STRING, {
-    //     useCreateIndex: true,
-    //     useNewUrlParser: true,
-    //     useUnifiedTopology: true
-    // })
-
     // Create an Apollo server
     const server: ApolloServer<ExpressContext> = new ApolloServer({
         schema,
@@ -96,4 +90,4 @@ const startApolloServer = async (schema: any) => {
 
 // Start the server
 startApolloServer(schema);
-// startApolloServer(schema, context)
+// startApolloServer(schema, context);
