@@ -3,7 +3,11 @@ import cors from 'cors';
 import * as http from 'http';
 import express from 'express';
 import { ApolloServer, ExpressContext } from 'apollo-server-express';
-import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
+import {
+  ApolloServerPluginDrainHttpServer,
+  ApolloServerPluginLandingPageProductionDefault,
+  ApolloServerPluginLandingPageLocalDefault
+} from 'apollo-server-core';
 
 // GraphQl import
 import schema from './schema';
@@ -35,7 +39,13 @@ const startApolloServer = async (schema: any) => {
     //   return { user: currentUser, User, Message }
     // },
     plugins: [
-      ApolloServerPluginDrainHttpServer({ httpServer })
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      process.env.NODE_ENV === 'production'
+        ? ApolloServerPluginLandingPageProductionDefault({
+          graphRef: "my-graph-id@my-graph-variant",
+          footer: false,
+        })
+        : ApolloServerPluginLandingPageLocalDefault({ footer: false })
     ]
   });
 
