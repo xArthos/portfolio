@@ -19,7 +19,7 @@ import 'dotenv/config';
 
 // const startApolloServer = async (schema: any, createTestContext: any) => {
 const startApolloServer = async (schema: any) => {
-  const app: express.Application = express();
+  const app: express.Application = (module.exports = express());
   const httpServer: http.Server = http.createServer(app);
 
   // Connect to MongoDb

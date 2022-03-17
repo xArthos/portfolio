@@ -2,9 +2,10 @@
   "name": "arthos-portfolio-server",
   "version": "1.0.0",
   "description": "Server side for the portfolio page",
-  "main": "index.js",
+  "main": "src/server.ts",
   "scripts": {
-    "start": "nodemon src/server.ts",
+    "start": "npx tsc -w",
+    "dev": "npx nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Giampaolo Nico Lo Cascio",
