@@ -75,7 +75,7 @@ const startApolloServer = async (schema: any) => {
   consoleMessage('Server', 'startApolloServer', `Attempt to run server`);
 
   await server.start();
-  server.applyMiddleware({ app, cors: false });
+  server.applyMiddleware({ app, cors: true });
   await new Promise<void>(resolve => httpServer.listen({ port: 4000 }, resolve));
 
   // Console a successfully response
