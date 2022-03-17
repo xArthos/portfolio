@@ -1,6 +1,9 @@
 // Modules
 import { MongoClient, Db } from 'mongodb';
 
+// Utils
+import { consoleMessage, consoleMessageResult } from './consoleMessage';
+
 // Config
 import 'dotenv/config';
 
@@ -42,23 +45,40 @@ export const initDb = async () => {
     };
 
     if (!cached.promise) {
-        console.log('Establishing new database connection');
+        // Console attempt to connect
+        console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+        consoleMessage('Attempt', 'initDb', 'Establishing new database connection');
+
         // const opts = {
         //     useNewUrlParser: true,
         //     useUnifiedTopology: true,
         // };
 
-        cached.promise = MongoClient.connect(process.env.DB_CONN_STRING as string).then(
-            (client) => {
-                return {
-                    client,
-                    db: client.db(process.env.DB_NAME),
-                };
-            }
-        );
+        cached.promise = MongoClient.connect(process.env.DB_CONN_STRING as string).then((client) => {
+            return {
+                client,
+                db: client.db(process.env.DB_NAME)
+            };
+        });
     };
 
-    cached.conn = await cached.promise;
-    db =  cached.conn.db;
-    return cached.conn;
+    try {
+        cached.conn = await cached.promise;
+        db = cached.conn.db;
+
+        // Console a successful response
+        consoleMessageResult(true, 'initDb', 'Connection with database established');
+        console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+
+        return cached.conn;
+    } catch (error: any) {
+        // Console a negative response
+        consoleMessageResult(false, 'initDb', 'Failed attempt to connect to MongoDb');
+        console.log('');
+        console.log('\x1b[35m%s\x1b[0m', '# Details:');
+        console.error(error);
+        console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+
+        return cached.conn;
+    };
 };

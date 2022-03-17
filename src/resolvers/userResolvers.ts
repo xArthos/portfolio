@@ -1,34 +1,14 @@
 // Modules
+import { ObjectId } from 'mongodb';
 import { ApolloError } from 'apollo-server-express';
 
-export const getUser = async () => {
-    try {
-        const test = {
-            _id: '#asdasdas',
-            name: {
-                firstName: 'Giampaolo',
-                secondName: 'Nico',
-                lastName: 'Lo Cascio',
-                fullName: 'Porcoddio'
-            },
-            nickname: 'Arthos',
-            type: 'user',
-            email: {
-                currentEmail: 'porcoddio@dio.porco',
-                isVerified: true,
-                oldEmails: [
-                    'porcamadonna@madonna.puttana'
-                ]
-            },
-            avatar: {
-                source: 'dio.png',
-                blockAvatar: {
-                    color: '#492359'
-                }
-            }
-        };
+// Utils
+import { db } from '../utils/mongoDb';
 
-        return test;
+export const getUser = async (_: any, { _id }: any) => {
+    console.log(_id)
+    try {
+        return await db.collection('users').findOne({ _id: new ObjectId(_id) });;
     } catch (error: any) {
         throw new ApolloError(error);
     } finally {

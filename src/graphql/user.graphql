@@ -22,7 +22,7 @@
 # }
 
 type Query {
-    user: User!
+    user(_id: String): User!
 }
 
 type Mutation {
@@ -48,7 +48,7 @@ type UserName {
 }
 
 type UserEmail {
-    currentEmail: String!
+    current: String!
     isVerified: Boolean!
     oldEmails: [String]!
 }
