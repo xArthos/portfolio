@@ -56,13 +56,14 @@ const startApolloServer = async (schema: any) => {
     ];
 
     const corsOptions: cors.CorsOptions = {
-        origin: '*',
-        // methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-        // allowedHeaders: ['Content-Type'],
-        // preflightContinue: false,
+        origin: allowedOrigins,
+        methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+        exposedHeaders: 'Authorization',
+        allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
+        preflightContinue: false,
         credentials: true,
-        // optionsSuccessStatus: 204,
-        // maxAge: 84600
+        optionsSuccessStatus: 204,
+        maxAge: 84600
     };
 
     // app.use(cors(corsOptions));
@@ -77,7 +78,7 @@ const startApolloServer = async (schema: any) => {
     await server.start();
     server.applyMiddleware({
         app,
-        path: '*',
+        path: '/graphql',
         cors: corsOptions
     });
 
