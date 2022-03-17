@@ -63,7 +63,7 @@ export const initDb = async () => {
             };
         });
     };
- 
+
     try {
         cached.conn = await cached.promise;
         db = cached.conn.db;
