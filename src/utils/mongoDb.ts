@@ -54,6 +54,8 @@ export const initDb = async () => {
         //     useUnifiedTopology: true,
         // };
 
+        console.log(process.env.DB_CONN_STRING)
+
         cached.promise = MongoClient.connect(process.env.DB_CONN_STRING as string).then((client) => {
             return {
                 client,
