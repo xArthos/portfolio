@@ -54,8 +54,6 @@ export const initDb = async () => {
         //     useUnifiedTopology: true,
         // };
 
-        console.log(process.env.DB_CONN_STRING)
-
         cached.promise = MongoClient.connect(process.env.DB_CONN_STRING as string).then((client) => {
             return {
                 client,
@@ -64,9 +62,14 @@ export const initDb = async () => {
         });
     };
 
+    console.log('Connect 1')
+
     try {
+        console.log('Connect 2')
         cached.conn = await cached.promise;
+        console.log('Connect 3')
         db = cached.conn.db;
+        console.log('Connect 4')
 
         // Console a successful response
         consoleMessageResult(true, 'initDb', 'Connection with database established');
