@@ -52,7 +52,7 @@ const startApolloServer = async (schema: any) => {
 
     const corsOptions: cors.CorsOptions = {
         origin: allowedOrigins,
-        methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+        methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
         exposedHeaders: 'Authorization',
         allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
         preflightContinue: false,
@@ -63,6 +63,11 @@ const startApolloServer = async (schema: any) => {
 
     // app.use(cors(corsOptions));
     app.use(express.json());
+    app.use((req, res, next) => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+        next();
+    });
 
     // Routes
     app.get(`/`, (req, res) => res.send(`hey`));
