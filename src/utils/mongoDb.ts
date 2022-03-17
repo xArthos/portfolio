@@ -64,7 +64,7 @@ export const initDb = async () => {
 
     console.log('Connect 1')
 
-    try {
+    // try {
         console.log('Connect 2')
         cached.conn = await cached.promise;
         console.log('Connect 3')
@@ -76,14 +76,14 @@ export const initDb = async () => {
         console.log('\x1b[90m%s\x1b[0m', '--------------------------');
 
         return cached.conn;
-    } catch (error: any) {
-        // Console a negative response
-        consoleMessageResult(false, 'initDb', 'Failed attempt to connect to MongoDb');
-        console.log('');
-        console.log('\x1b[35m%s\x1b[0m', '# Details:');
-        console.error(error);
-        console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+    // } catch (error: any) {
+    //     // Console a negative response
+    //     consoleMessageResult(false, 'initDb', 'Failed attempt to connect to MongoDb');
+    //     console.log('');
+    //     console.log('\x1b[35m%s\x1b[0m', '# Details:');
+    //     console.error(error);
+    //     console.log('\x1b[90m%s\x1b[0m', '--------------------------');
 
-        return cached.conn;
-    };
+    //     return cached.conn;
+    // };
 };
