@@ -52,10 +52,12 @@ const startApolloServer = async (schema: any) => {
   // Add a list of allowed origins.
   // If you have more origins you would like to add, you can add them to the array below.
   const allowedOrigins = [process.env.CROSS_ORIGIN || 'http://localhost:3000', 'https://studio.apollographql.com'];
+  const headers = ['Origin', 'X-Requested-With', 'Content-Type', 'Accept']
 
   const corsOptions = {
     origin: allowedOrigins,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    headers: headers,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     credentials: true,
     optionsSuccessStatus: 204
