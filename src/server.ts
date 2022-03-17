@@ -96,4 +96,4 @@ const startApolloServer = async (schema: any) => {
 
 // Start the server
 startApolloServer(schema);
-// startApolloServer(schema, context);
+// startApolloServer(schema, context)
