@@ -2,6 +2,7 @@
 import cors from 'cors';
 import * as http from 'http';
 import express from 'express';
+import mongoose from 'mongoose';
 import { ApolloServer, ExpressContext } from 'apollo-server-express';
 import {
     ApolloServerPluginLandingPageLocalDefault
@@ -26,6 +27,11 @@ const startApolloServer = async (schema: any) => {
 
     // Connect to MongoDb
     await initDb();
+    // mongoose.connect(process.env.DB_CONN_STRING, {
+    //     useCreateIndex: true,
+    //     useNewUrlParser: true,
+    //     useUnifiedTopology: true
+    // })
 
     // Create an Apollo server
     const server: ApolloServer<ExpressContext> = new ApolloServer({

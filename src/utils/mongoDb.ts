@@ -21,13 +21,13 @@ declare global {
 
 if (!process.env.DB_CONN_STRING) {
     throw new Error(
-        "Define the DB_CONN_STRING environment variable inside .env"
+        'Define the DB_CONN_STRING environment variable inside .env'
     );
 };
 
 if (!process.env.DB_NAME) {
     throw new Error(
-        "Define the DB_NAME environment variable inside .env"
+        'Define the DB_NAME environment variable inside .env'
     );
 };
 
@@ -62,28 +62,23 @@ export const initDb = async () => {
         });
     };
 
-    console.log('Connect 1')
-
-    // try {
-        console.log('Connect 2')
+    try {
         cached.conn = await cached.promise;
-        console.log('Connect 3')
         db = cached.conn.db;
-        console.log('Connect 4')
 
         // Console a successful response
         consoleMessageResult(true, 'initDb', 'Connection with database established');
         console.log('\x1b[90m%s\x1b[0m', '--------------------------');
 
         return cached.conn;
-    // } catch (error: any) {
-    //     // Console a negative response
-    //     consoleMessageResult(false, 'initDb', 'Failed attempt to connect to MongoDb');
-    //     console.log('');
-    //     console.log('\x1b[35m%s\x1b[0m', '# Details:');
-    //     console.error(error);
-    //     console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+    } catch (error: any) {
+        // Console a negative response
+        consoleMessageResult(false, 'initDb', 'Failed attempt to connect to MongoDb');
+        console.log('');
+        console.log('\x1b[35m%s\x1b[0m', '# Details:');
+        console.error(error);
+        console.log('\x1b[90m%s\x1b[0m', '--------------------------');
 
-    //     return cached.conn;
-    // };
+        return cached.conn;
+    };
 };
