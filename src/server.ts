@@ -2,9 +2,9 @@
 import cors from 'cors';
 import * as http from 'http';
 import express from 'express';
-import mongoose from 'mongoose';
 import { ApolloServer, ExpressContext } from 'apollo-server-express';
 import {
+    ApolloServerPluginDrainHttpServer,
     ApolloServerPluginLandingPageLocalDefault
 } from 'apollo-server-core';
 
@@ -25,8 +25,6 @@ const startApolloServer = async (schema: any) => {
     const app: express.Application = (module.exports = express());
     const httpServer: http.Server = http.createServer(app);
 
-    // Connect to MongoDb
-    await initDb();
     // mongoose.connect(process.env.DB_CONN_STRING, {
     //     useCreateIndex: true,
     //     useNewUrlParser: true,
@@ -43,6 +41,7 @@ const startApolloServer = async (schema: any) => {
         //   return { user: currentUser, User, Message }
         // },
         plugins: [
+            ApolloServerPluginDrainHttpServer({ httpServer }),
             ApolloServerPluginLandingPageLocalDefault({ footer: false })
         ]
     });
@@ -60,10 +59,6 @@ const startApolloServer = async (schema: any) => {
         maxAge: 84600
     };
 
-    // app.use((req, resp, next) => {
-    //   next()
-    // }, cors(corsOptions))
-
     app.use(cors(corsOptions));
     app.use(express.json());
 
@@ -75,6 +70,10 @@ const startApolloServer = async (schema: any) => {
 
     await server.start();
     server.applyMiddleware({ app, cors: corsOptions });
+
+    // Connect to MongoDb
+    await initDb();
+
     await new Promise<void>(resolve => httpServer.listen({ port: 4000 }, resolve));
 
     // Console a successfully response
