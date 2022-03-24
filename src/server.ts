@@ -23,7 +23,6 @@ import 'dotenv/config';
 // const startApolloServer = async (schema: any, createTestContext: any) => {
 const startApolloServer = async (schema: any) => {
     const app: express.Application = (module.exports = express());
-    app.use(cors());
     const httpServer: http.Server = http.createServer(app);
 
     // mongoose.connect(process.env.DB_CONN_STRING, {
@@ -86,8 +85,6 @@ const startApolloServer = async (schema: any) => {
         path: '/graphql',
         cors: corsOptions
     });
-
-    console.log(app)
 
     // Connect to MongoDb
     await initDb();
