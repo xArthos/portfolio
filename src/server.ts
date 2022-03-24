@@ -30,8 +30,8 @@ const startApolloServer = async (schema: any) => {
     //     useNewUrlParser: true,
     //     useUnifiedTopology: true
     // })
-    // Connect to MongoDb
-    await initDb();
+    // // Connect to MongoDb
+    // await initDb();
 
     // Create an Apollo server
     const server: ApolloServer<ExpressContext> = new ApolloServer({
@@ -50,7 +50,7 @@ const startApolloServer = async (schema: any) => {
 
     // Add a list of allowed origins.
     // If you have more origins you would like to add, you can add them to the array below.
-    const allowedOrigins = [process.env.CROSS_ORIGIN || 'http://localhost:3000', 'https://studio.apollographql.com', 'https://studio.apollographql.com/sandbox/explorer', 'https://serverxarthos.vercel.app'];
+    const allowedOrigins = [process.env.CROSS_ORIGIN || 'http://localhost:3000', 'https://studio.apollographql.com', 'https://studio.apollographql.com/sandbox/explorer', 'https://serverxarthos.vercel.app', 'https://serverxarthos.vercel.app/graphql'];
 
     const corsOptions: cors.CorsOptions = {
         origin: allowedOrigins,
@@ -77,6 +77,9 @@ const startApolloServer = async (schema: any) => {
         path: '/graphql',
         cors: corsOptions
     });
+
+    // Connect to MongoDb
+    await initDb();
 
     await new Promise<void>(resolve => httpServer.listen({ port: 4000 }, resolve));
 
