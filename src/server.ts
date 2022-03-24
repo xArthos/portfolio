@@ -53,13 +53,14 @@ const startApolloServer = async (schema: any) => {
     const allowedOrigins = [process.env.CROSS_ORIGIN || 'http://localhost:3000', 'https://studio.apollographql.com', 'https://studio.apollographql.com/sandbox/explorer', 'https://serverxarthos.vercel.app', 'https://serverxarthos.vercel.app/graphql'];
 
     const corsOptions: cors.CorsOptions = {
-        origin: allowedOrigins,
+        // origin: allowedOrigins,
+        origin: true,
         // methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
         // allowedHeaders: ['Content-Type'],
         // preflightContinue: false,
         credentials: true,
-        optionsSuccessStatus: 204,
-        maxAge: 84600
+        // optionsSuccessStatus: 204,
+        // maxAge: 84600
     };
 
     // app.use(cors(corsOptions));
