@@ -72,7 +72,7 @@ const startApolloServer = async (schema: any) => {
     await server.start();
     server.applyMiddleware({
         app,
-        path: '*',
+        path: '/graphql',
         cors: corsOptions
     });
 
