@@ -54,7 +54,7 @@ const startApolloServer = async (schema: any) => {
 
     const corsOptions: cors.CorsOptions = {
         // origin: allowedOrigins,
-        origin: true,
+        origin: '*',
         // methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
         // allowedHeaders: ['Content-Type'],
         // preflightContinue: false,
