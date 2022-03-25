@@ -22,7 +22,8 @@ import 'dotenv/config';
 
 // const startApolloServer = async (schema: any, createTestContext: any) => {
 const startApolloServer = async (schema: any) => {
-    const app: express.Application = (module.exports = express());
+    // const app: express.Application = (module.exports = express());
+    const app = express();
     const httpServer: http.Server = http.createServer(app);
 
     // mongoose.connect(process.env.DB_CONN_STRING, {
@@ -47,6 +48,7 @@ const startApolloServer = async (schema: any) => {
             ApolloServerPluginLandingPageLocalDefault({ footer: false })
         ]
     });
+    await server.start();
 
     // Add a list of allowed origins.
     // If you have more origins you would like to add, you can add them to the array below.
@@ -71,20 +73,22 @@ const startApolloServer = async (schema: any) => {
     };
 
     // app.use(cors(corsOptions));
-    app.use(express.json());
+    // app.use(express.json());
 
-    // Routes
-    app.get(`/`, (req, res) => res.send(`hey`));
+
 
     // Run the server
     consoleMessage('Server', 'startApolloServer', `Attempt to run server`);
 
-    await server.start();
+
     server.applyMiddleware({
         app,
         path: '/graphql',
         cors: corsOptions
     });
+    
+    // Routes
+    app.get(`/`, (req, res) => res.send(`hey`));
 
     // Connect to MongoDb
     await initDb();
