@@ -22,8 +22,7 @@ import 'dotenv/config';
 
 // const startApolloServer = async (schema: any, createTestContext: any) => {
 const startApolloServer = async (schema: any) => {
-    // const app: express.Application = (module.exports = express());
-    const app = express();
+    const app: express.Application = (module.exports = express());
     const httpServer: http.Server = http.createServer(app);
 
     // mongoose.connect(process.env.DB_CONN_STRING, {
@@ -31,8 +30,6 @@ const startApolloServer = async (schema: any) => {
     //     useNewUrlParser: true,
     //     useUnifiedTopology: true
     // })
-    // // Connect to MongoDb
-    // await initDb();
 
     // Create an Apollo server
     const server: ApolloServer<ExpressContext> = new ApolloServer({
@@ -48,6 +45,8 @@ const startApolloServer = async (schema: any) => {
             ApolloServerPluginLandingPageLocalDefault({ footer: false })
         ]
     });
+
+    // Start the server
     await server.start();
 
     // Add a list of allowed origins.
@@ -58,7 +57,8 @@ const startApolloServer = async (schema: any) => {
         'https://studio.apollographql.com/sandbox/explorer',
         'https://serverxarthos.vercel.app',
         'https://serverxarthos.vercel.app/graphql',
-        'https://portfolio-server-lmohye3vr-xarthos.vercel.app'
+        'https://portfolio-server-lmohye3vr-xarthos.vercel.app',
+        'studio.apollographql.com'
     ];
 
     const corsOptions: cors.CorsOptions = {
@@ -72,27 +72,24 @@ const startApolloServer = async (schema: any) => {
         // maxAge: 84600
     };
 
-    // app.use(cors(corsOptions));
-    // app.use(express.json());
-
-
-
-    // Run the server
-    consoleMessage('Server', 'startApolloServer', `Attempt to run server`);
-
-
     server.applyMiddleware({
         app,
         path: '/graphql',
         cors: corsOptions
     });
-    
+
+    // App Config
+    // app.use(cors(corsOptions));
+    // app.use(express.json());
+
     // Routes
     app.get(`/`, (req, res) => res.send(`hey`));
 
     // Connect to MongoDb
     await initDb();
 
+    // Start the Http Server
+    consoleMessage('Server', 'startApolloServer', `Attempt to run server`);
     await new Promise<void>(resolve => httpServer.listen({ port: 4000 }, resolve));
 
     // Console a successfully response
