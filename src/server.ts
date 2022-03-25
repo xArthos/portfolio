@@ -15,6 +15,9 @@ import schema from './schema';
 import { initDb } from './utils/mongoDb';
 import { consoleMessage, consoleMessageResult } from './utils/consoleMessage';
 
+// Data
+import { getUser } from './resolvers/userResolvers';
+
 // Config
 import 'dotenv/config';
 
@@ -83,7 +86,11 @@ const startApolloServer = async (schema: any) => {
     // app.use(express.json());
 
     // Routes
-    app.get(`/`, (req, res) => res.send(`hey`));
+    app.get(`*`, async (req, res) => {
+        const data = getUser(undefined, { _id: '623222d2826ad9c729d5fb1e' });
+
+        return res.send(await data);
+    });
 
     // Connect to MongoDb
     await initDb();
