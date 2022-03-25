@@ -15,7 +15,9 @@ export const getUser = async (_: any, { _id }: any) => {
     // console.log(db);
 
     try {
-        return await db.collection('users').findOne({ _id: new ObjectId(_id ? _id : '623222d2826ad9c729d5fb1e') });
+        const data = await db.collection('users').findOne({ _id: new ObjectId(_id) });
+        console.log(data);
+        return data;
     } catch (error: any) {
         throw new ApolloError(error);
     } finally {

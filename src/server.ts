@@ -97,7 +97,8 @@ const startApolloServer = async (schema: any) => {
 
     // Start the Http Server
     consoleMessage('Server', 'startApolloServer', `Attempt to run server`);
-    await new Promise<void>(resolve => httpServer.listen({ port: 4000 }, resolve));
+    // await new Promise<void>(resolve => httpServer.listen({ port: 4000 }, resolve));
+    await new Promise<void>(resolve => app.listen({ port: 4000 }, resolve));
 
     // Console a successfully response
     consoleMessageResult(true, 'startApolloServer', `🚀 Server ready at`);
