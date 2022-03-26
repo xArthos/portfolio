@@ -69,7 +69,7 @@ const startApolloServer = async (schema: any) => {
         // methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
         // allowedHeaders: ['Content-Type'],
         // preflightContinue: false,
-        credentials: true,
+        // credentials: true,
         // optionsSuccessStatus: 204,
         // maxAge: 84600
     };
@@ -77,18 +77,20 @@ const startApolloServer = async (schema: any) => {
     server.applyMiddleware({
         app,
         path: '/graphql',
-        cors: true
+        cors: corsOptions
     });
 
     // App Config
     // app.use(cors(corsOptions));
     // app.use(express.json());
     app.use('/graphql', (req, res, next) => {
-        res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+        // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
         res.header(
             "Access-Control-Allow-Headers",
             "Origin, X-Requested-With, Content-Type, Accept"
         );
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
         // res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
         // res.append('Access-Control-Allow-Headers', 'Content-Type');
         next();
@@ -96,6 +98,7 @@ const startApolloServer = async (schema: any) => {
 
     // Routes
     app.get(`*`, async (req, res) => {
+        console.log(req)
         const data = getUser(undefined, { _id: '623222d2826ad9c729d5fb1e' });
 
         return res.status(200).send(await data);
