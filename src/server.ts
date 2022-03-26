@@ -55,14 +55,13 @@ const startApolloServer = async (schema: any) => {
     // Add a list of allowed origins.
     // If you have more origins you would like to add, you can add them to the array below.
     const allowedOrigins = [
-        process.env.CROSS_ORIGIN || '*',
+        // process.env.CROSS_ORIGIN || '*',
         'http://localhost:3000',
         'https://studio.apollographql.com',
         'https://studio.apollographql.com/sandbox/explorer',
         'https://serverxarthos.vercel.app',
         'https://serverxarthos.vercel.app/graphql',
-        'https://portfolio-server-lmohye3vr-xarthos.vercel.app',
-        'studio.apollographql.com'
+        'https://portfolio-server-lmohye3vr-xarthos.vercel.app'
     ];
 
     const corsOptions: cors.CorsOptions = {
@@ -85,6 +84,12 @@ const startApolloServer = async (schema: any) => {
     // App Config
     // app.use(cors(corsOptions));
     // app.use(express.json());
+    app.use((req, res, next) => {
+        res.append('Access-Control-Allow-Origin', allowedOrigins);
+        res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.append('Access-Control-Allow-Headers', 'Content-Type');
+        next();
+    });
 
     // Routes
     app.get(`*`, async (req, res) => {
