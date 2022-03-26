@@ -85,7 +85,7 @@ const startApolloServer = async (schema: any) => {
     // app.use(cors(corsOptions));
     // app.use(express.json());
     app.use('/graphql', (req, res, next) => {
-        res.append('Access-Control-Allow-Origin', 'http://localhost:3000');
+        res.append('Access-Control-Allow-Origin', '*');
         res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
         res.append('Access-Control-Allow-Headers', 'Content-Type');
         next();
