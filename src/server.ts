@@ -58,14 +58,14 @@ const startApolloServer = async (schema: any) => {
         plugins: [
             ApolloServerPluginDrainHttpServer({ httpServer }),
             ApolloServerPluginLandingPageLocalDefault({ footer: false })
-        ],
+        ]
     });
 
     // Start the server
     await server.start();
 
     const corsOptions: cors.CorsOptions = {
-        origin: allowedOrigins,
+        origin: 'http://localhost:3000',
         // origin: '*',
         // methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
         // allowedHeaders: ['Content-Type'],
