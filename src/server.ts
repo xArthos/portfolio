@@ -55,7 +55,8 @@ const startApolloServer = async (schema: any) => {
     // Add a list of allowed origins.
     // If you have more origins you would like to add, you can add them to the array below.
     const allowedOrigins = [
-        process.env.CROSS_ORIGIN || 'http://localhost:3000',
+        process.env.CROSS_ORIGIN || '*',
+        'http://localhost:3000',
         'https://studio.apollographql.com',
         'https://studio.apollographql.com/sandbox/explorer',
         'https://serverxarthos.vercel.app',
@@ -89,7 +90,7 @@ const startApolloServer = async (schema: any) => {
     app.get(`*`, async (req, res) => {
         const data = getUser(undefined, { _id: '623222d2826ad9c729d5fb1e' });
 
-        return res.send(await data);
+        return res.status(200).send(await data);
     });
 
     // Connect to MongoDb
