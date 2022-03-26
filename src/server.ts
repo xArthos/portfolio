@@ -5,9 +5,7 @@ import express from 'express';
 import { ApolloServer, ExpressContext } from 'apollo-server-express';
 import {
     ApolloServerPluginDrainHttpServer,
-    ApolloServerPluginLandingPageLocalDefault,
-    GraphQLResponse,
-    GraphQLRequestContext
+    ApolloServerPluginLandingPageLocalDefault
 } from 'apollo-server-core';
 
 // GraphQl import
@@ -61,20 +59,6 @@ const startApolloServer = async (schema: any) => {
             ApolloServerPluginDrainHttpServer({ httpServer }),
             ApolloServerPluginLandingPageLocalDefault({ footer: false })
         ],
-        formatResponse: (response: GraphQLResponse | null, requestContext: GraphQLRequestContext<any>) => {
-            if (requestContext.response && requestContext.response.http) {
-                requestContext.response.http.headers.set('Access-Control-Allow-Origin', 'http://localhost:3000');
-                requestContext.response.http.headers.set('Access-Control-Allow-Origin', 'https://studio.apollographql.com');
-                requestContext.response.http.headers.set('Access-Control-Allow-Origin', 'https://studio.apollographql.com/sandbox/explorer');
-                requestContext.response.http.headers.set('Access-Control-Allow-Origin', 'https://serverxarthos.vercel.app');
-                requestContext.response.http.headers.set('Access-Control-Allow-Origin', 'https://serverxarthos.vercel.app/graphql');
-                requestContext.response.http.headers.set('Access-Control-Allow-Origin', 'https://portfolio-server-lmohye3vr-xarthos.vercel.app');
-                requestContext.response.http.headers.set('Access-Control-Allow-Origin', 'https://portfolio-server-lmohye3vr-xarthos.vercel.app/graphql');
-                requestContext.response.http.headers.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-                requestContext.response.http.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-            }
-            return response as GraphQLResponse;
-        },
     });
 
     // Start the server
@@ -100,8 +84,8 @@ const startApolloServer = async (schema: any) => {
     // App Config
     // app.use(cors(corsOptions));
     // app.use(express.json());
-    app.use((req, res, next) => {
-        res.append('Access-Control-Allow-Origin', allowedOrigins);
+    app.use('/graphql', (req, res, next) => {
+        res.append('Access-Control-Allow-Origin', 'https://studio.apollographql.com');
         res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
         res.append('Access-Control-Allow-Headers', 'Content-Type');
         next();
