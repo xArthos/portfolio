@@ -11,7 +11,7 @@
             "src": "/(.*)",
             "dest": "src/server.ts",
             "status": 200,
-            "continue": "true"
+            "continue": true
         },
         {
             "src": "/graphql",
