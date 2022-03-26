@@ -15,7 +15,11 @@
                 "POST",
                 "PUT",
                 "DELETE"
-            ]
+            ],
+            "headers": {
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Origin": "*"
+            }
         }
     ]
 }
