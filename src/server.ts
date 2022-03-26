@@ -5,7 +5,9 @@ import express from 'express';
 import { ApolloServer, ExpressContext } from 'apollo-server-express';
 import {
     ApolloServerPluginDrainHttpServer,
-    ApolloServerPluginLandingPageLocalDefault
+    ApolloServerPluginLandingPageLocalDefault,
+    GraphQLResponse,
+    GraphQLRequestContext
 } from 'apollo-server-core';
 
 // GraphQl import
@@ -22,6 +24,18 @@ import { getUser } from './resolvers/userResolvers';
 import 'dotenv/config';
 
 // const processContext = async ({ req, res }: { req: any, res: any }) => ({ res });
+
+// Add a list of allowed origins.
+// If you have more origins you would like to add, you can add them to the array below.
+const allowedOrigins = [
+    // process.env.CROSS_ORIGIN || '*',
+    'http://localhost:3000',
+    'https://studio.apollographql.com',
+    'https://studio.apollographql.com/sandbox/explorer',
+    'https://serverxarthos.vercel.app',
+    'https://serverxarthos.vercel.app/graphql',
+    'https://portfolio-server-lmohye3vr-xarthos.vercel.app'
+];
 
 // const startApolloServer = async (schema: any, createTestContext: any) => {
 const startApolloServer = async (schema: any) => {
@@ -46,23 +60,25 @@ const startApolloServer = async (schema: any) => {
         plugins: [
             ApolloServerPluginDrainHttpServer({ httpServer }),
             ApolloServerPluginLandingPageLocalDefault({ footer: false })
-        ]
+        ],
+        formatResponse: (response: GraphQLResponse | null, requestContext: GraphQLRequestContext<any>) => {
+            if (requestContext.response && requestContext.response.http) {
+                requestContext.response.http.headers.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+                requestContext.response.http.headers.set('Access-Control-Allow-Origin', 'https://studio.apollographql.com');
+                requestContext.response.http.headers.set('Access-Control-Allow-Origin', 'https://studio.apollographql.com/sandbox/explorer');
+                requestContext.response.http.headers.set('Access-Control-Allow-Origin', 'https://serverxarthos.vercel.app');
+                requestContext.response.http.headers.set('Access-Control-Allow-Origin', 'https://serverxarthos.vercel.app/graphql');
+                requestContext.response.http.headers.set('Access-Control-Allow-Origin', 'https://portfolio-server-lmohye3vr-xarthos.vercel.app');
+                requestContext.response.http.headers.set('Access-Control-Allow-Origin', 'https://portfolio-server-lmohye3vr-xarthos.vercel.app/graphql');
+                requestContext.response.http.headers.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+                requestContext.response.http.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+            }
+            return response as GraphQLResponse;
+        },
     });
 
     // Start the server
     await server.start();
-
-    // Add a list of allowed origins.
-    // If you have more origins you would like to add, you can add them to the array below.
-    const allowedOrigins = [
-        // process.env.CROSS_ORIGIN || '*',
-        'http://localhost:3000',
-        'https://studio.apollographql.com',
-        'https://studio.apollographql.com/sandbox/explorer',
-        'https://serverxarthos.vercel.app',
-        'https://serverxarthos.vercel.app/graphql',
-        'https://portfolio-server-lmohye3vr-xarthos.vercel.app'
-    ];
 
     const corsOptions: cors.CorsOptions = {
         origin: allowedOrigins,
