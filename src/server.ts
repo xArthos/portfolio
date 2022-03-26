@@ -27,7 +27,8 @@ import 'dotenv/config';
 // If you have more origins you would like to add, you can add them to the array below.
 const allowedOrigins = [
     'http://localhost:3000',
-    'https://studio.apollographql.com'
+    'https://studio.apollographql.com',
+    'https://arthos-portfolio.vercel.app'
 ];
 
 console.log(process.env.CROSS_ORIGIN)
