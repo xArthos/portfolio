@@ -26,14 +26,11 @@ import 'dotenv/config';
 // Add a list of allowed origins.
 // If you have more origins you would like to add, you can add them to the array below.
 const allowedOrigins = [
-    // process.env.CROSS_ORIGIN || '*',
-    'http://localhost:3000',
-    'https://studio.apollographql.com',
-    'https://studio.apollographql.com/sandbox/explorer',
-    'https://serverxarthos.vercel.app',
-    'https://serverxarthos.vercel.app/graphql',
-    'https://portfolio-server-lmohye3vr-xarthos.vercel.app'
+    'http://localhost',
+    'https://studio.apollographql.com'
 ];
+
+console.log(process.env.CROSS_ORIGIN)
 
 // const startApolloServer = async (schema: any, createTestContext: any) => {
 const startApolloServer = async (schema: any) => {
@@ -65,11 +62,11 @@ const startApolloServer = async (schema: any) => {
     await server.start();
 
     const corsOptions: cors.CorsOptions = {
-        origin: true,
+        origin: allowedOrigins,
         // methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
         // allowedHeaders: ['Content-Type'],
         // preflightContinue: false,
-        // credentials: true,
+        credentials: true,
         // optionsSuccessStatus: 204,
         // maxAge: 84600
     };
@@ -83,21 +80,9 @@ const startApolloServer = async (schema: any) => {
     // App Config
     // app.use(cors(corsOptions));
     // app.use(express.json());
-    app.use('/graphql', (req, res, next) => {
-        // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-        res.header(
-            "Access-Control-Allow-Headers",
-            "Origin, X-Requested-With, Content-Type, Accept"
-        );
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-        // res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-        // res.append('Access-Control-Allow-Headers', 'Content-Type');
-        next();
-    });
 
     // Routes
-    app.get(`*`, async (req, res) => {
+    app.get(`/`, async (req, res) => {
         console.log(req)
         const data = getUser(undefined, { _id: '623222d2826ad9c729d5fb1e' });
 
