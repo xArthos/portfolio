@@ -10,6 +10,7 @@ import {
 
 // GraphQl import
 import schema from './schema';
+import { createContext } from './utils/context';
 
 // Utils
 import { initDb } from './utils/mongoDb';
@@ -31,8 +32,6 @@ const allowedOrigins = [
     'https://arthos-portfolio.vercel.app'
 ];
 
-console.log(process.env.CROSS_ORIGIN)
-
 // const startApolloServer = async (schema: any, createTestContext: any) => {
 const startApolloServer = async (schema: any) => {
     const app: express.Application = (module.exports = express());
@@ -47,12 +46,7 @@ const startApolloServer = async (schema: any) => {
     // Create an Apollo server
     const server: ApolloServer<ExpressContext> = new ApolloServer({
         schema,
-        // context: ({ req }) => {
-        //   const token = req.headers.authorization;
-        //   // TODO: #1 Finish the context
-        //   const currentUser = User.getUserByToken(token);
-        //   return { user: currentUser, User, Message }
-        // },
+        context: createContext,
         plugins: [
             ApolloServerPluginDrainHttpServer({ httpServer }),
             ApolloServerPluginLandingPageLocalDefault({ footer: false })
@@ -85,7 +79,7 @@ const startApolloServer = async (schema: any) => {
     // Routes
     app.get(`/`, async (req, res) => {
         console.log(req)
-        const data = getUser(undefined, { _id: '623222d2826ad9c729d5fb1e' });
+        const data = getUser(undefined, { _id: '623222d2826ad9c729d5fb1e' }, undefined);
 
         return res.status(200).send(await data);
     });

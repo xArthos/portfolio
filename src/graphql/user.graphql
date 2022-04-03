@@ -31,7 +31,7 @@ type Mutation {
 
 # Types
 type User {
-    _id: String!
+    _id: ObjectId!
     name: UserName!
     nickname: String!
     type: String!
@@ -48,9 +48,9 @@ type UserName {
 }
 
 type UserEmail {
-    current: String!
+    current: Email!
     isVerified: Boolean!
-    oldEmails: [String]!
+    oldEmails: [Email]!
 }
 
 type UserAvatar {
@@ -66,8 +66,8 @@ type BlockAvatar {
 input UserInput {
     name: UserNameInput!
     nickname: String!
-    password: String!
-    email: String!
+    password: Password!
+    email: Email!
     avatar: UserAvatarInput
 }
 

@@ -9,7 +9,7 @@ import { signUp } from './mutations/userMutations';
 
 const resolvers: IResolvers = {
     Query: {
-        user: getUser,
+        user: getUser
     },
     Mutation: {
         signUp: signUp

@@ -5,10 +5,16 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 
 // GraphQl Imports
 import resolvers from './resolvers';
-import * as typeDefs from './graphql/user.graphql';
+import * as userTypeDefs from './graphql/user.graphql';
+import * as scalarTypeDefs from './graphql/scalarTypes.graphql';
+
+const modules = [
+    userTypeDefs,
+    scalarTypeDefs
+];
 
 const schema: GraphQLSchema = makeExecutableSchema({
-    typeDefs,
+    typeDefs: modules.map(schema => schema),
     resolvers
 });
 

@@ -5,13 +5,13 @@ import { ApolloError } from 'apollo-server-express';
 // Utils
 import { db, initDb } from '../utils/mongoDb';
 
-export const getUser = async (_: any, { _id }: any) => {
+export const getUser = async (_root: any, { _id }: any, _context: any) => {
     // Reconnect mongoDb if is not connected
     if (!db) {
         await initDb();
     };
 
-    // console.log(_id);
+    console.log(_context);
     // console.log(db);
 
     try {

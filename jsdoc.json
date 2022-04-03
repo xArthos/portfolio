@@ -1,0 +1,23 @@
+{
+    "plugins": [
+        "plugins/markdown",
+        "node_modules/better-docs/typescript"
+    ],
+    "source": {
+        "include": ["src"],
+        "includePattern": "\\.(jsx|js|ts|tsx)$",
+        "excludePattern": "(node_modules/|jsdoc)"
+    },
+    "tags": {
+        "allowUnknownTags": ["optional"]
+    },
+    "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": true
+    },
+    "opts": {
+        "destination": "./jsdoc",
+        "recurse": true,
+        "template": "node_modules/better-docs"
+    }
+}
