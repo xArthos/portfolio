@@ -22,7 +22,8 @@
 # }
 
 type Query {
-    user(_id: String): User!
+    user(_id: ObjectId!): User!
+    currentUser(token: String!): User!
 }
 
 type Mutation {

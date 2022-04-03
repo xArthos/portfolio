@@ -1,6 +1,35 @@
 # **Portfolio Server**
 
-List of issue labels:
+## **About**
+
+This is an express app wrote in typescrypt using apollo-server-express and mongoDB.
+This project can be deployed on vercel.
+
+### **Main Packages**
+
+- apollo-server-express
+- mongodb
+- typescript
+- luxon
+- nodemon
+- express
+
+### **Utils Packages**
+
+- jsdoc
+- @graphql-codegen/cli
+
+___
+
+## **Commands & Utils**
+
+### **GitHub**
+
+#### **Issues**
+
+##### Commands for creating issues
+
+##### List of issue labels
 
 |Label|Details|
 |----|------------|     
@@ -13,3 +42,7 @@ List of issue labels:
 |**invalid**|This doesn't seem right|
 |**question**|Further information is requested|
 |**wontfix**|This will not be worked on|
+
+### **JSDoc**
+
+### **GraphQl Types Generator**

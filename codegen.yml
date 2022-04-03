@@ -6,7 +6,7 @@ documents:
 overwrite: true
 clientSchema: ./local/schema.graphql
 generates:
-    src/graphql-types.ts:
+    src/generated/graphql-types.ts:
         plugins:
             - typescript
             - typescript-operations

@@ -11,7 +11,7 @@ module.exports = {
     documents: ['./src/graphql/*.graphql', './src/graphql/*.gql'],
     overwrite: true,
     generates: {
-        './src/generated/graphql.tsx': {
+        './src/generated/graphql.d.ts': {
             plugins: [
                 'typescript',
                 'typescript-operations',
@@ -24,7 +24,7 @@ module.exports = {
                 withComponent: false
             },
         },
-        './graphql.schema.json': {
+        './src/graphql/*.graphql': {
             plugins: ['introspection']
         }
     }
