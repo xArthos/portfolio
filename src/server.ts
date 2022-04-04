@@ -44,7 +44,7 @@ const startApolloServer = async (schema: any) => {
     const server: ApolloServer<ExpressContext> = new ApolloServer({
         schema,
         context: createContext,
-        introspection: true,
+        introspection: true, // Allows apollo.sandbox to read server's schemas
         plugins: [
             ApolloServerPluginDrainHttpServer({ httpServer }),
             ApolloServerPluginLandingPageLocalDefault({ footer: false })
@@ -100,6 +100,7 @@ const startApolloServer = async (schema: any) => {
     server.applyMiddleware({
         app,
         path: '/graphql',
+        bodyParserConfig: true,
         cors: corsOptions
     });
 
