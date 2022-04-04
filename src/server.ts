@@ -68,9 +68,13 @@ const startApolloServer = async (schema: any) => {
     // App Config
     app.use(sessions({
         secret: process.env.SESSION_SECRET || 'sessionSecretTest',
-        saveUninitialized: true,
-        cookie: { maxAge: oneDay },
-        resave: false
+        saveUninitialized: false,
+        resave: false,
+        cookie: {
+            maxAge: oneDay,
+            secure: false,
+            sameSite: 'none'
+        }
     }));
     app.use(cookieParser());
     app.use(bodyParser.urlencoded({ extended: false }))
