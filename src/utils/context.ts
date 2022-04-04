@@ -56,7 +56,7 @@ export const createContext = async ({ req, res }: { req: any, res: any }) => {
     req && req.cookies && req.cookies.devArthosPortfolio ||
     req && req.headers && req.headers.authorization && req.headers.authorization.split(' ')[1];
 
-    console.log(req.cookies, token)
+    console.log(req.cookies, token, req && req.headers && req.headers.authorization)
 
     try {
         if (!token) {
