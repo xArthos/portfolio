@@ -2,6 +2,8 @@
 import cors from 'cors';
 import * as http from 'http';
 import express from 'express';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import { ApolloServer, ExpressContext } from 'apollo-server-express';
 import {
     ApolloServerPluginDrainHttpServer,
@@ -37,12 +39,6 @@ const startApolloServer = async (schema: any) => {
     const app: express.Application = (module.exports = express());
     const httpServer: http.Server = http.createServer(app);
 
-    // mongoose.connect(process.env.DB_CONN_STRING, {
-    //     useCreateIndex: true,
-    //     useNewUrlParser: true,
-    //     useUnifiedTopology: true
-    // })
-
     // Create an Apollo server
     const server: ApolloServer<ExpressContext> = new ApolloServer({
         schema,
@@ -66,15 +62,17 @@ const startApolloServer = async (schema: any) => {
         // maxAge: 84600
     };
 
+    // App Config
+    app.use(cookieParser());
+    app.use(bodyParser.urlencoded({ extended: false }))
+    app.use(bodyParser.json());
+    app.use(express.json());
+
     server.applyMiddleware({
         app,
         path: '/graphql',
         cors: corsOptions
     });
-
-    // App Config
-    // app.use(cors(corsOptions));
-    // app.use(express.json());
 
     // Routes
     app.get(`/`, async (req, res) => {

@@ -23,11 +23,12 @@
 
 type Query {
     user(_id: ObjectId!): User!
-    currentUser(token: String!): User!
+    currentUser: User!
 }
 
 type Mutation {
-    signUp(name: UserNameInput!, password: String!, email: String!, nickname: String!): User!
+    signUp(name: UserNameInput!, password: Password!, email: Email!, nickname: String!): String!
+    logIn(password: Password!, email: Email!): String!
 }
 
 # Types

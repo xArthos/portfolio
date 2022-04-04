@@ -23,6 +23,14 @@ ___
 
 ## **Commands & Utils**
 
+### **Generate a random crypto key**
+
+write on terminal
+> `node`
+
+> require('crypto').randomBytes(64).
+toString('hex')
+
 ### **GitHub**
 
 #### **Issues**

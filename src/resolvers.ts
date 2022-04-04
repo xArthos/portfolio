@@ -5,7 +5,7 @@ import { IResolvers } from '@graphql-tools/utils';
 import { getUser, getCurrentUser } from './resolvers/userResolvers';
 
 // Mutations
-import { signUp } from './mutations/userMutations';
+import { signUp, login } from './mutations/userMutations';
 
 const resolvers: IResolvers = {
     Query: {
@@ -13,7 +13,8 @@ const resolvers: IResolvers = {
         currentUser: getCurrentUser
     },
     Mutation: {
-        signUp: signUp
+        signUp: signUp,
+        logIn: login
     }
 };
 
