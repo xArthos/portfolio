@@ -51,10 +51,17 @@ const getUser = async (token: string) => {
  * @param {any} req - The request data sent to the server, it is necessary for getting headers and cookies.
  */
 export const createContext = async ({ req, res }: { req: any, res: any }) => {
+    console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+    consoleMessage('Server Context', 'Verify Request Data', `cookies`);
+    console.log(req && req.cookies);
+    console.log('\x1b[36m%s\x1b[0m', '-------------');
+    consoleMessage('Server Context', 'Verify Request Data', `headers`);
+    console.log( req && req.headers);
+    console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+
     const token =
         req && req.cookies && req.cookies.devArthosPortfolio ||
         req && req.headers && req.headers.authorization && req.headers.authorization.split(' ')[1];
-        // console.log(req.cookies);
 
     try {
         if (!token) {
@@ -74,7 +81,7 @@ export const createContext = async ({ req, res }: { req: any, res: any }) => {
                 res,
                 session: { isAuth: true },
                 user: user
-            }
+            };
         };
 
         return {
