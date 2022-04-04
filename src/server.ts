@@ -57,7 +57,7 @@ const startApolloServer = async (schema: any) => {
 
     const corsOptions: cors.CorsOptions = {
         origin: allowedOrigins,
-        // methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+        methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
         // allowedHeaders: ['Content-Type'],
         // preflightContinue: false,
         credentials: true,
@@ -89,7 +89,6 @@ const startApolloServer = async (schema: any) => {
 
     // Routes
     app.get(`/`, async (req, res) => {
-        console.log(req)
         const data = getUser(undefined, { _id: '623222d2826ad9c729d5fb1e' }, { user: undefined, session: { isAuth: false } });
 
         return res.status(200).send(await data);
