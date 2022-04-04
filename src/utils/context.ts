@@ -5,6 +5,7 @@ import { ApolloError, AuthenticationError } from 'apollo-server-express';
 
 // Utils
 import { db, initDb } from './mongoDb';
+import { consoleMessage, consoleMessageResult } from './consoleMessage';
 
 // Config
 import 'dotenv/config';
@@ -20,29 +21,27 @@ const getUser = async (token: string) => {
         await initDb();
     };
 
-    // console.log(token)
-
     // Todo: add a jwt token that verify the user login session and data
+    consoleMessage('Server Context', 'verifyToken', `token verification`);
     const id: any = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || 'secretTesting', (err, userTokenData) => {
         if (err) {
-            // console.log(err);
+            consoleMessageResult(false, 'verifyToken', err.message);
             return;
         };
 
+        consoleMessageResult(true, 'verifyToken', 'Token successfully verified');
         return userTokenData;
     });
-
-    console.log(id)
 
     try {
         if (!id) return;
         const user = await db.collection('users').findOne({ _id: new ObjectId(id.userId) });
 
+        consoleMessageResult(true, 'verifyToken', 'User retrieved from token data');
         return user;
     } catch (error: any) {
+        consoleMessageResult(false, 'Fetch user', 'Couldn\'t fetch the logged user');
         throw new ApolloError(error);
-    } finally {
-        console.log('Context attempt');
     };
 };
 
@@ -55,13 +54,7 @@ export const createContext = async ({ req, res }: { req: any, res: any }) => {
     const token =
         req && req.cookies && req.cookies.devArthosPortfolio ||
         req && req.headers && req.headers.authorization && req.headers.authorization.split(' ')[1];
-
-    console.log('Create Context')
-    console.log(req.cookies)
-    console.log(req.headers)
-    console.log(req.session)
-    console.log('-------------')
-    console.log(token)
+        // console.log(req.cookies);
 
     try {
         if (!token) {
@@ -72,27 +65,28 @@ export const createContext = async ({ req, res }: { req: any, res: any }) => {
             }
         };
 
-        const user = await getUser(token); // TODO: credentials not working on graphql studio (/api/graphql)
+        console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+        const user = await getUser(token);
+        console.log('\x1b[90m%s\x1b[0m', '--------------------------');
 
-        if (!user) {
+        if (user) {
             return {
                 res,
-                session: { isAuth: false },
-                user: undefined
+                session: { isAuth: true },
+                user: user
             }
         };
 
         return {
             res,
-            session: { isAuth: true },
-            user: user
+            session: { isAuth: false },
+            user: undefined
         };
     } catch (error) {
-        // console.log(error)
         return {
             res,
             session: { isAuth: false },
             user: undefined
         };
-    }
+    };
 };

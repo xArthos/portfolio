@@ -11,6 +11,7 @@ import {
 
 // Utils
 import { db } from '../utils/mongoDb';
+import { consoleMessage, consoleMessageResult } from '../utils/consoleMessage';
 
 // Config
 import 'dotenv/config';
@@ -19,15 +20,23 @@ const authorizationHeader = (userId: ObjectId, ctx: { res: { setHeader: (arg0: s
     const token = createToken(userId);
 
     try {
+        console.log('\x1b[36m%s\x1b[0m', '-------------');
+        consoleMessage('Mutations Inner Task', 'set response cookie', `Attempt to create a token for authorization`);
         ctx.res.setHeader(
             'Set-Cookie',
             // `devArthosPortfolio=${token}; SameSite=None; Secure`,
-            `devArthosPortfolio=${token}; Max-Age=315360000; Path=/; SameSite=Secure; HttpOnly${process.env.NODE_ENV !== 'development' ? '; Secure' : ''}`
+            `devArthosPortfolio=${token}; Max-Age=7200; Path=/graphql; SameSite=Secure; HttpOnly${process.env.NODE_ENV !== 'development' ? '; Secure' : ''}`
         );
+        consoleMessageResult(true, 'set response cookie', 'cookie successfully created');
+        console.log('\x1b[36m%s\x1b[0m', '-------------');
     } catch (error) {
+        consoleMessageResult(false, 'set response cookie', 'error during the creation of the cookie');
         console.log(error);
+        console.log('\x1b[36m%s\x1b[0m', '-------------');
     };
 
+    if (token) { consoleMessageResult(true, 'authorizationHeader', 'Authorization successfully created'); } 
+    else { consoleMessageResult(false, 'authorizationHeader', 'Error during the creation of an authorization'); }
     return token;
 };
 
@@ -84,11 +93,10 @@ export const login = async (_: any, { email, password }: { email: string, passwo
     // const valid = await bcrypt.compare(password, user.password.hash);
     // if (!valid) throw new AuthenticationError('wrong credentials');
 
+    console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+    consoleMessage('Mutations Task', 'authorizationHeader', `Attempt to create authorization`);
     const token = authorizationHeader(user._id, ctx);
-
-    // await db
-    //     .collection('users')
-    //     .updateOne({ _id: user._id }, { $set: { token: token } });
+    console.log('\x1b[90m%s\x1b[0m', '--------------------------');
 
     return token;
 };
