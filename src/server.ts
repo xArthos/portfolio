@@ -57,12 +57,29 @@ const startApolloServer = async (schema: any) => {
 
     const corsOptions: cors.CorsOptions = {
         origin: allowedOrigins,
-        methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-        // allowedHeaders: ['Content-Type'],
-        // preflightContinue: false,
+        methods: 'GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE',
+        allowedHeaders: [
+            'Content-Type',
+            'Origin',
+            'Access-Control-Request-Method',
+            'Access-Control-Request-Headers',
+            'Access-Control-Allow-Origin',
+            'Access-Control-Allow-Credentials',
+            'Access-Control-Allow-Headers',
+            'Access-Control-Allow-Methods',
+            'Connection',
+            'Authorization',
+            'Content-Length',
+            'Cookie',
+            'DNT',
+            'Host',
+            'Refer',
+            'User-Agent'
+        ],
+        preflightContinue: false,
         credentials: true,
-        // optionsSuccessStatus: 204,
-        // maxAge: 84600
+        optionsSuccessStatus: 204,
+        maxAge: 84600
     };
 
     // App Config
