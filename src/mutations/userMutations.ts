@@ -21,6 +21,7 @@ const authorizationHeader = (userId: ObjectId, ctx: { res: { setHeader: (arg0: s
     try {
         ctx.res.setHeader(
             'Set-Cookie',
+            // `devArthosPortfolio=${token}; SameSite=None; Secure`,
             `devArthosPortfolio=${token}; Max-Age=315360000; Path=/; SameSite=Secure; HttpOnly${process.env.NODE_ENV !== 'development' ? '; Secure' : ''}`
         );
     } catch (error) {
