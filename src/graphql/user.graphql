@@ -23,7 +23,7 @@
 
 type Query {
     user(_id: ObjectId!): User!
-    currentUser: User!
+    currentUser: User
 }
 
 type Mutation {

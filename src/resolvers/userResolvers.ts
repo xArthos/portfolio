@@ -14,11 +14,11 @@ export const getUser = async (_root: undefined, { _id }: { _id: string }, { user
     if (!db) {
         await initDb();
     };
-    console.log(_id)
+    console.log(user)
 
     try {
         const data = await db.collection('users').findOne({ _id: new ObjectId(_id) });
-        console.log(user && user._id);
+
         return data;
     } catch (error: any) {
         throw new ApolloError(error);

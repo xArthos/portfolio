@@ -56,14 +56,14 @@ export const createContext = async ({ req, res }: { req: any, res: any }) => {
     req && req.cookies && req.cookies.devArthosPortfolio ||
     req && req.headers && req.headers.authorization && req.headers.authorization.split(' ')[1];
 
-    // console.log(req.cookies, token)
+    console.log(req.cookies, token)
 
     try {
         if (!token) {
             return {
                 res,
                 session: { isAuth: false },
-                user: new AuthenticationError('you must be logged in')
+                user: undefined
             }
         };
 
@@ -73,7 +73,7 @@ export const createContext = async ({ req, res }: { req: any, res: any }) => {
             return {
                 res,
                 session: { isAuth: false },
-                user: new AuthenticationError('you must be logged in')
+                user: undefined
             }
         };
 
