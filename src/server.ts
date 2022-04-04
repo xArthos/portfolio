@@ -25,8 +25,6 @@ import { getUser } from './resolvers/userResolvers';
 // Config
 import 'dotenv/config';
 
-// const processContext = async ({ req, res }: { req: any, res: any }) => ({ res });
-
 // Add a list of allowed origins.
 // If you have more origins you would like to add, you can add them to the array below.
 const allowedOrigins = [
@@ -46,6 +44,7 @@ const startApolloServer = async (schema: any) => {
     const server: ApolloServer<ExpressContext> = new ApolloServer({
         schema,
         context: createContext,
+        introspection: true,
         plugins: [
             ApolloServerPluginDrainHttpServer({ httpServer }),
             ApolloServerPluginLandingPageLocalDefault({ footer: false })
@@ -127,4 +126,3 @@ const startApolloServer = async (schema: any) => {
 
 // Start the server
 startApolloServer(schema);
-// startApolloServer(schema, context);
