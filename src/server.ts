@@ -2,6 +2,7 @@
 import cors from 'cors';
 import * as http from 'http';
 import express from 'express';
+import sessions from 'express-session';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { ApolloServer, ExpressContext } from 'apollo-server-express';
@@ -34,6 +35,8 @@ const allowedOrigins = [
     'https://arthos-portfolio.vercel.app'
 ];
 
+const oneDay = 1000 * 60 * 60 * 24;
+
 // const startApolloServer = async (schema: any, createTestContext: any) => {
 const startApolloServer = async (schema: any) => {
     const app: express.Application = (module.exports = express());
@@ -63,6 +66,12 @@ const startApolloServer = async (schema: any) => {
     };
 
     // App Config
+    app.use(sessions({
+        secret: process.env.SESSION_SECRET || 'sessionSecretTest',
+        saveUninitialized: true,
+        cookie: { maxAge: oneDay },
+        resave: false
+    }));
     app.use(cookieParser());
     app.use(bodyParser.urlencoded({ extended: false }))
     app.use(bodyParser.json());
