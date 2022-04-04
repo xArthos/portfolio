@@ -52,12 +52,14 @@ const getUser = async (token: string) => {
  * @param {any} req - The request data sent to the server, it is necessary for getting headers and cookies.
  */
 export const createContext = async ({ req, res }: { req: any, res: any }) => {
-    const token = 
-    req && req.cookies && req.cookies.devArthosPortfolio ||
-    req && req.headers && req.headers.authorization && req.headers.authorization.split(' ')[1];
+    const token =
+        req && req.cookies && req.cookies.devArthosPortfolio ||
+        req && req.headers && req.headers.authorization && req.headers.authorization.split(' ')[1];
 
     console.log('Create Context')
-    console.log(req && req.headers)
+    console.log(req)
+    console.log('-------------')
+    console.log(token)
 
     try {
         if (!token) {
