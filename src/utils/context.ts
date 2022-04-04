@@ -57,7 +57,9 @@ export const createContext = async ({ req, res }: { req: any, res: any }) => {
         req && req.headers && req.headers.authorization && req.headers.authorization.split(' ')[1];
 
     console.log('Create Context')
-    console.log(req)
+    console.log(req.cookies)
+    console.log(req.headers)
+    console.log(req.session)
     console.log('-------------')
     console.log(token)
 
