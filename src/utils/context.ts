@@ -69,7 +69,7 @@ export const createContext = async ({ req, res }: { req: any, res: any }) => {
                 res,
                 session: { isAuth: false },
                 user: undefined
-            }
+            };
         };
 
         console.log('\x1b[90m%s\x1b[0m', '--------------------------');
