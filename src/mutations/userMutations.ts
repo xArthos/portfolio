@@ -10,7 +10,7 @@ import {
 } from 'apollo-server-errors';
 
 // Utils
-import { db } from '../utils/mongoDb';
+import { db, initDb } from '../utils/mongoDb';
 import { consoleMessage, consoleMessageResult } from '../utils/consoleMessage';
 
 // Config
@@ -49,6 +49,10 @@ export const signUp = async (
     { name, nickname, password, email, avatar }: { name: any, nickname: string, password: string, email: string, avatar: any },
     ctx: any
 ) => {
+    if (!db) {
+        await initDb();
+    };
+
     const randColor = () => {
         return "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0').toUpperCase();
     };
@@ -87,6 +91,11 @@ export const signUp = async (
 };
 
 export const login = async (_: any, { email, password }: { email: string, password: string }, ctx: any) => {
+    if (!db) {
+        await initDb();
+    };
+    console.log(db)
+
     const user = await db.collection('users').findOne({ 'email.current': email });
     if (!user) throw new AuthenticationError('wrong credentials');
 
