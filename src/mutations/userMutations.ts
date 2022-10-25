@@ -91,10 +91,11 @@ export const signUp = async (
 };
 
 export const login = async (_: any, { email, password }: { email: string, password: string }, ctx: any) => {
+    console.log('attempt')
     if (!db) {
         await initDb();
     };
-    console.log(db)
+    console.log(db);
 
     const user = await db.collection('users').findOne({ 'email.current': email });
     if (!user) throw new AuthenticationError('wrong credentials');
