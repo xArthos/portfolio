@@ -14,7 +14,7 @@ export const getUser = async (_root: undefined, { _id }: { _id: string }, { user
     if (!db) {
         await initDb();
     };
-    // console.log(user)
+    console.log(user)
 
     try {
         const data = await db.collection('users').findOne({ _id: new ObjectId(_id) });
