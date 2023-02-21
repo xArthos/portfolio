@@ -51,6 +51,9 @@
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
     "tsc-watch": "^4.6.2",
-    "json5": ">=1.0.2"
+    "json5": ">=1.0.2",
+    "http-cache-semantics": ">=4.1.1",
+    "semver-regex": ">=3.1.4",
+    "got": ">=11.8.5"
   }
 }
