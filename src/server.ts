@@ -48,7 +48,6 @@ const startApolloServer = async (schema: any) => {
     // Create an Apollo server
     const server: ApolloServer<MyContext> = new ApolloServer({
         schema,
-        // context: createContext,
         introspection: true, // Allows apollo.sandbox to read server's schemas
         plugins: [
             ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -87,27 +86,27 @@ const startApolloServer = async (schema: any) => {
     };
 
     // App Config
-    app.use(sessions({
-        secret: process.env.SESSION_SECRET || 'sessionSecretTest',
-        saveUninitialized: false,
-        resave: false,
-        cookie: {
-            maxAge: oneDay,
-            secure: false,
-            sameSite: 'none'
-        }
-    }));
-    app.use(cookieParser());
-    app.use(bodyParser.urlencoded({ extended: false }))
-    app.use(bodyParser.json());
-    app.use(express.json());
-
-    // server.applyMiddleware({
-    //     app,
-    //     path: '/graphql',
-    //     bodyParserConfig: true,
-    //     cors: corsOptions
-    // });
+    app.use(
+        '/graphql',
+        cors<cors.CorsRequest>(corsOptions),
+        bodyParser.urlencoded({ extended: false }),
+        bodyParser.json(),
+        cookieParser(),
+        express.json(),
+        expressMiddleware(server, {
+            context: createContext,
+        }),
+        sessions({
+            secret: process.env.SESSION_SECRET || 'sessionSecretTest',
+            saveUninitialized: false,
+            resave: false,
+            cookie: {
+                maxAge: oneDay,
+                secure: false,
+                sameSite: 'none'
+            }
+        })
+    );
 
     // Routes
     app.get(`/`, async (req, res) => {
