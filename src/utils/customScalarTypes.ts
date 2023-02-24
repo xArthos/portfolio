@@ -1,16 +1,16 @@
 // Modules
 import { Kind } from 'graphql/language';
 import { ObjectId } from 'mongodb';
-import { UserInputError } from 'apollo-server-errors';
+import { GraphQLError } from 'graphql';
 import { GraphQLScalarType } from 'graphql';
 
 // Data
 import validateEmail from './validateEmail';
 
 const testPassword = (value: string) => {
-    if (value.length < 5) throw new UserInputError('Password is too short');
-    if (value.length > 40) throw new UserInputError('Password is too long');
-    if (/\s/.test(value)) throw new UserInputError('Password should not contains white spaces');
+    if (value.length < 5) throw new GraphQLError('Password is too short');
+    if (value.length > 40) throw new GraphQLError('Password is too long');
+    if (/\s/.test(value)) throw new GraphQLError('Password should not contains white spaces');
 };
 
 export const ObjectIdScalar = new GraphQLScalarType({
@@ -20,21 +20,21 @@ export const ObjectIdScalar = new GraphQLScalarType({
     // Server -> Client
     serialize(value: any) {
         if (!(value instanceof ObjectId))
-            throw new UserInputError('invalid objectId');
+            throw new GraphQLError('invalid objectId');
 
         return value.toString();
     },
 
     // Client -> Server (as json)
     parseValue(value: any) {
-        if (!ObjectId.isValid(value)) throw new UserInputError('invalid objectId');
+        if (!ObjectId.isValid(value)) throw new GraphQLError('invalid objectId');
 
         return new ObjectId(value);
     },
 
     // Client -> Server (as string)
     parseLiteral(ast) {
-        if (ast.kind !== Kind.STRING) throw new UserInputError('invalid objectId');
+        if (ast.kind !== Kind.STRING) throw new GraphQLError('invalid objectId');
 
         const value = ast.value.toString();
         return new ObjectId(value);
@@ -53,17 +53,17 @@ export const EmailScalar = new GraphQLScalarType({
     // Client -> Server (as json)
     parseValue(value) {
         if (typeof value !== 'string' || !validateEmail(value))
-            throw new UserInputError('a@b.c');
+            throw new GraphQLError('a@b.c');
 
         return value.trim().toLowerCase();
     },
 
     // Client -> Server (as string)
     parseLiteral(ast) {
-        if (ast.kind !== Kind.STRING) throw new UserInputError('a@b.c');
+        if (ast.kind !== Kind.STRING) throw new GraphQLError('a@b.c');
 
         const value = ast.value.toString();
-        if (!validateEmail(value)) throw new UserInputError('a@b.c');
+        if (!validateEmail(value)) throw new GraphQLError('a@b.c');
 
         return value.trim().toLowerCase();
     }
@@ -80,7 +80,7 @@ export const PasswordScalar = new GraphQLScalarType({
 
     // Client -> Server (as json)
     parseValue(value) {
-        if (typeof value !== 'string') throw new UserInputError('invalid password');
+        if (typeof value !== 'string') throw new GraphQLError('invalid password');
 
         testPassword(value);
         return value.trim();
@@ -88,7 +88,7 @@ export const PasswordScalar = new GraphQLScalarType({
 
     // Client -> Server (as string)
     parseLiteral(ast) {
-        if (ast.kind !== Kind.STRING) throw new UserInputError('invalid password');
+        if (ast.kind !== Kind.STRING) throw new GraphQLError('invalid password');
 
         const value = ast.value.toString();
         testPassword(value);

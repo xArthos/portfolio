@@ -5,11 +5,11 @@ import express from 'express';
 import sessions from 'express-session';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import { ApolloServer, ExpressContext } from 'apollo-server-express';
-import {
-    ApolloServerPluginDrainHttpServer,
-    ApolloServerPluginLandingPageLocalDefault
-} from 'apollo-server-core';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
+import { ApolloServerPluginDrainHttpServer, } from '@apollo/server/plugin/drainHttpServer';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+
 
 // GraphQl import
 import schema from './schema';
@@ -24,6 +24,10 @@ import { getUser } from './resolvers/userResolvers';
 
 // Config
 import 'dotenv/config';
+
+interface MyContext {
+    token?: String;
+}
 
 // Add a list of allowed origins.
 // If you have more origins you would like to add, you can add them to the array below.
@@ -42,9 +46,9 @@ const startApolloServer = async (schema: any) => {
     const httpServer: http.Server = http.createServer(app);
 
     // Create an Apollo server
-    const server: ApolloServer<ExpressContext> = new ApolloServer({
+    const server: ApolloServer<MyContext> = new ApolloServer({
         schema,
-        context: createContext,
+        // context: createContext,
         introspection: true, // Allows apollo.sandbox to read server's schemas
         plugins: [
             ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -98,12 +102,12 @@ const startApolloServer = async (schema: any) => {
     app.use(bodyParser.json());
     app.use(express.json());
 
-    server.applyMiddleware({
-        app,
-        path: '/graphql',
-        bodyParserConfig: true,
-        cors: corsOptions
-    });
+    // server.applyMiddleware({
+    //     app,
+    //     path: '/graphql',
+    //     bodyParserConfig: true,
+    //     cors: corsOptions
+    // });
 
     // Routes
     app.get(`/`, async (req, res) => {
@@ -122,7 +126,7 @@ const startApolloServer = async (schema: any) => {
 
     // Console a successfully response
     consoleMessageResult(true, 'startApolloServer', `🚀 Server ready at`);
-    console.log('\x1b[34m%s\x1b[0m', `http://localhost:4000${server.graphqlPath}`);
+    console.log('\x1b[34m%s\x1b[0m', `http://localhost:4000}`);
     console.log('\x1b[90m%s\x1b[0m', '--------------------------');
 };
 

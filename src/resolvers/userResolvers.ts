@@ -1,6 +1,6 @@
 // Modules
 import { ObjectId } from 'mongodb';
-import { ApolloError } from 'apollo-server-express';
+import { GraphQLError } from 'graphql';
 
 // Utils
 import { db, initDb } from '../utils/mongoDb';
@@ -21,7 +21,7 @@ export const getUser = async (_root: undefined, { _id }: { _id: string }, { user
 
         return data;
     } catch (error: any) {
-        throw new ApolloError(error);
+        throw new GraphQLError(error);
     } finally {
         console.log('User Query attempt');
     };

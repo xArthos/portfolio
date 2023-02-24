@@ -3,11 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { DateTime } from "luxon";
 import { ObjectId } from 'mongodb';
-import {
-    ForbiddenError,
-    UserInputError,
-    AuthenticationError
-} from 'apollo-server-errors';
+import { GraphQLError } from 'graphql';
 
 // Utils
 import { db, initDb } from '../utils/mongoDb';
@@ -35,7 +31,7 @@ const authorizationHeader = (userId: ObjectId, ctx: { res: { setHeader: (arg0: s
         console.log('\x1b[36m%s\x1b[0m', '-------------');
     };
 
-    if (token) { consoleMessageResult(true, 'authorizationHeader', 'Authorization successfully created'); } 
+    if (token) { consoleMessageResult(true, 'authorizationHeader', 'Authorization successfully created'); }
     else { consoleMessageResult(false, 'authorizationHeader', 'Error during the creation of an authorization'); }
     return token;
 };
@@ -97,7 +93,12 @@ export const login = async (_: any, { email, password }: { email: string, passwo
     // console.log(db);
 
     const user = await db.collection('users').findOne({ 'email.current': email });
-    if (!user) throw new AuthenticationError('wrong credentials');
+    if (!user) throw new GraphQLError('wrong credentials', {
+        extensions: {
+            code: 'UNAUTHENTICATED',
+            myExtension: "foo",
+        },
+    });
 
     // const valid = await bcrypt.compare(password, user.password.hash);
     // if (!valid) throw new AuthenticationError('wrong credentials');

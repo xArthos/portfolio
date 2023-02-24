@@ -1,7 +1,7 @@
 // Modules
 import jwt from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
-import { ApolloError, AuthenticationError } from 'apollo-server-express';
+import { GraphQLError } from 'graphql';
 
 // Utils
 import { db, initDb } from './mongoDb';
@@ -41,7 +41,9 @@ const getUser = async (token: string) => {
         return user;
     } catch (error: any) {
         consoleMessageResult(false, 'Fetch user', 'Couldn\'t fetch the logged user');
-        throw new ApolloError(error);
+        throw new GraphQLError(error, {
+            extensions: { code: 'YOUR_ERROR_CODE' },
+        });
     };
 };
 
@@ -56,7 +58,7 @@ export const createContext = async ({ req, res }: { req: any, res: any }) => {
     console.log(req && req.cookies);
     console.log('\x1b[36m%s\x1b[0m', '-------------');
     consoleMessage('Server Context', 'Verify Request Data', `headers`);
-    console.log( req && req.headers);
+    console.log(req && req.headers);
     console.log('\x1b[90m%s\x1b[0m', '--------------------------');
 
     const token =
