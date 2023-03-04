@@ -6,6 +6,7 @@ import { ObjectId } from 'mongodb';
 import { GraphQLError } from 'graphql';
 
 // Utils
+import validateEmail from '../utils/validateEmail';
 import { db, initDb } from '../utils/mongoDb';
 import { consoleMessage, consoleMessageResult } from '../utils/consoleMessage';
 
@@ -49,54 +50,75 @@ export const signUp = async (
         await initDb();
     };
 
-    const randColor = () => {
-        return "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0').toUpperCase();
-    };
+    const emailValidation = await validateEmail(email);
 
-    const user = {
-        _id: new ObjectId(),
-        email: {
-            current: email,
-            isVerified: false,
-            oldEmails: []
-        },
-        // password: await bcrypt.hash(password, 11),
-        password: password,
-        nickname: nickname,
-        name: {
-            firstName: name.firstName.trim(),
-            secondName: name.secondName && name.secondName.trim(),
-            lastName: name.lastName.trim()
-        },
-        createdAt: DateTime.now().setZone('system').toISO(),
-        type: 'user',
-        avatar: {
-            source: avatar?.source,
-            blockAvatar: {
-                color: randColor(),
-                bgColor: randColor(),
-                spotColor: randColor()
+    if (emailValidation.valid) {
+        const randColor = () => {
+            return "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0').toUpperCase();
+        };
+
+        const user = {
+            _id: new ObjectId(),
+            email: {
+                current: email,
+                isVerified: false,
+                oldEmails: []
+            },
+            // password: await bcrypt.hash(password, 11),
+            password: password,
+            nickname: nickname,
+            name: {
+                firstName: name.firstName.trim(),
+                secondName: name.secondName && name.secondName.trim(),
+                lastName: name.lastName.trim()
+            },
+            createdAt: DateTime.now().setZone('system').toISO(),
+            type: 'user',
+            avatar: {
+                source: avatar?.source,
+                blockAvatar: {
+                    color: randColor(),
+                    bgColor: randColor(),
+                    spotColor: randColor()
+                }
             }
-        }
+        };
+
+        await db.collection('users').insertOne(user);
+        const token = authorizationHeader(user._id, ctx);
+
+        return token;
+    } else {
+        let emailValidationError;
+
+        if (emailValidation.reason === 'smtp') {
+            emailValidationError = 'Wrong SMTP';
+        } else {
+            emailValidationError = 'Email not accepted';
+        };
+
+        throw new GraphQLError(emailValidationError);
     };
-
-    await db.collection('users').insertOne(user);
-    const token = authorizationHeader(user._id, ctx);
-
-    return token;
 };
 
 export const login = async (_: any, { email, password }: { email: string, password: string }, ctx: any) => {
     if (!db) {
         await initDb();
     };
-    // console.log(db);
+    console.log(email);
 
     const user = await db.collection('users').findOne({ 'email.current': email });
-    if (!user) throw new GraphQLError('wrong credentials', {
+    if (!user) throw new GraphQLError('User not found', {
         extensions: {
-            code: 'UNAUTHENTICATED',
-            myExtension: "foo",
+            code: 'USER_NOT_FOUND',
+            argumentName: 'Not in Database',
+            http: {
+                status: 404,
+                headers: new Map([
+                    ['some-header', 'it was bad'],
+                    ['another-header', 'seriously'],
+                ]),
+            }
         },
     });
 

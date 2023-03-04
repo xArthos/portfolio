@@ -7,6 +7,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
+import { ApolloServerErrorCode } from '@apollo/server/errors';
 import { ApolloServerPluginDrainHttpServer, } from '@apollo/server/plugin/drainHttpServer';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
@@ -39,6 +40,7 @@ const allowedOrigins = [
 ];
 
 const oneDay = 1000 * 60 * 60 * 24;
+const port = process.env.PORT || 4000;
 
 // const startApolloServer = async (schema: any, createTestContext: any) => {
 const startApolloServer = async (schema: any) => {
@@ -52,7 +54,35 @@ const startApolloServer = async (schema: any) => {
         plugins: [
             ApolloServerPluginDrainHttpServer({ httpServer }),
             ApolloServerPluginLandingPageLocalDefault({ footer: false })
-        ]
+        ],
+        formatError: (formattedError, error) => {
+            // GraphQL schema doesn't match
+            if (
+                formattedError.extensions?.code ===
+                ApolloServerErrorCode.GRAPHQL_VALIDATION_FAILED
+            ) {
+                return {
+                    ...formattedError,
+                    message: 'Your query doesn\'t match the schema. Try double-checking it!',
+                    statusCode: 404
+                };
+            };
+
+            // User not registered/missing
+            if (
+                formattedError.extensions?.code === 'USER_NOT_FOUND' &&
+                formattedError.extensions?.argumentName === 'Not in Database'
+            ) {
+                return {
+                    ...formattedError,
+                    statusCode: 404
+                };
+            };
+
+            // Otherwise return the formatted error. This error can also
+            // be manipulated in other ways, as long as it's returned.
+            return formattedError;
+        },
     });
 
     // Start the server
@@ -120,12 +150,12 @@ const startApolloServer = async (schema: any) => {
 
     // Start the Http Server
     consoleMessage('Server', 'startApolloServer', `Attempt to run server`);
-    // await new Promise<void>(resolve => httpServer.listen({ port: 4000 }, resolve));
-    await new Promise<void>(resolve => app.listen({ port: 4000 }, resolve));
+    await new Promise<void>(resolve => httpServer.listen({ port: port }, resolve));
+    // await new Promise<void>(resolve => app.listen({ port: port }, resolve));
 
     // Console a successfully response
     consoleMessageResult(true, 'startApolloServer', `🚀 Server ready at`);
-    console.log('\x1b[34m%s\x1b[0m', `http://localhost:4000}`);
+    console.log('\x1b[34m%s\x1b[0m', `http://localhost:${port}`);
     console.log('\x1b[90m%s\x1b[0m', '--------------------------');
 };
 

@@ -2,7 +2,7 @@
 
 ## **About**
 
-This is an express app wrote in typescrypt using apollo-server-express and mongoDB.
+This is an express app wrote in typescript using apollo-server-express and mongoDB.
 This project can be deployed on vercel.
 
 ### **Main Packages**
@@ -54,3 +54,6 @@ toString('hex')
 ### **JSDoc**
 
 ### **GraphQl Types Generator**
+
+### Generate a MongoDB Docker container
+docker run -d -p 27017:27017 -v ~/data:/data/db mongo

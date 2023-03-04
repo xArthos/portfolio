@@ -2,6 +2,7 @@
 import jwt from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
 import { GraphQLError } from 'graphql';
+import { Request, Response } from 'express';
 
 // Utils
 import { db, initDb } from './mongoDb';
@@ -52,7 +53,7 @@ const getUser = async (token: string) => {
  * @constructor
  * @param {any} req - The request data sent to the server, it is necessary for getting headers and cookies.
  */
-export const createContext = async ({ req, res }: { req: any, res: any }) => {
+export const createContext = async ({ req, res }: { req: Request, res: Response }) => {
     console.log('\x1b[90m%s\x1b[0m', '--------------------------');
     consoleMessage('Server Context', 'Verify Request Data', `cookies`);
     console.log(req && req.cookies);
