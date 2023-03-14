@@ -46,6 +46,26 @@ const port = process.env.PORT || 4000;
 const startApolloServer = async (schema: any) => {
     const app: express.Application = (module.exports = express());
     const httpServer: http.Server = http.createServer(app);
+    //? Pulgin for handling http error response (optional)
+    // const setHttpPlugin = {
+    //     async requestDidStart() {
+    //         return {
+    //             async willSendResponse({ response }: any) {
+    //                 response.http.headers.set('custom-header', 'custom-error');
+    //                 if (response.body.kind === 'single' &&
+    //                     response.body.singleResult.errors?.[0]?.extensions?.code === 'TEAPOT') {
+    //                     response.http.status = 418;
+    //                 };
+
+    //                 if (response.body.kind === 'single' &&
+    //                     response.body.singleResult.errors?.[0]?.extensions?.code === 'USER_NOT_FOUND') {
+    //                     console.log(response)
+    //                     response.http.status = 200;
+    //                 };
+    //             }
+    //         };
+    //     },
+    // };
 
     // Create an Apollo server
     const server: ApolloServer<MyContext> = new ApolloServer({
@@ -54,6 +74,7 @@ const startApolloServer = async (schema: any) => {
         plugins: [
             ApolloServerPluginDrainHttpServer({ httpServer }),
             ApolloServerPluginLandingPageLocalDefault({ footer: false })
+            // setHttpPlugin
         ],
         formatError: (formattedError, error) => {
             // GraphQL schema doesn't match
@@ -75,14 +96,15 @@ const startApolloServer = async (schema: any) => {
             ) {
                 return {
                     ...formattedError,
-                    statusCode: 404
+                    message: 'User not found',
+                    statusCode: 204
                 };
             };
 
             // Otherwise return the formatted error. This error can also
             // be manipulated in other ways, as long as it's returned.
             return formattedError;
-        },
+        }
     });
 
     // Start the server

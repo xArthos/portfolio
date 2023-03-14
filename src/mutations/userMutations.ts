@@ -105,21 +105,21 @@ export const login = async (_: any, { email, password }: { email: string, passwo
     if (!db) {
         await initDb();
     };
-    console.log(email);
 
     const user = await db.collection('users').findOne({ 'email.current': email });
     if (!user) throw new GraphQLError('User not found', {
         extensions: {
             code: 'USER_NOT_FOUND',
-            argumentName: 'Not in Database',
-            http: {
-                status: 404,
-                headers: new Map([
-                    ['some-header', 'it was bad'],
-                    ['another-header', 'seriously'],
-                ]),
-            }
-        },
+            argumentName: 'Not in Database'
+            //? Custom error message http details
+            // http: {
+            //     status: 204,
+            //     headers: new Map([
+            //         ['some-header', 'it was bad'],
+            //         ['another-header', 'seriously']
+            //     ])
+            // }
+        }
     });
 
     // const valid = await bcrypt.compare(password, user.password.hash);
