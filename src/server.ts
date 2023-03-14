@@ -36,8 +36,8 @@ const allowedOrigins = [
     'http://localhost:3000',
     'https://studio.apollographql.com',
     'https://arthos-portfolio.vercel.app',
-    'https://portfolio-client-5uac1fbso-xarthos.vercel.app/',
-    'https://portfolio-client-xarthos.vercel.app/'
+    'https://portfolio-client-5uac1fbso-xarthos.vercel.app',
+    'https://portfolio-client-xarthos.vercel.app'
 ];
 
 const oneDay = 1000 * 60 * 60 * 24;
