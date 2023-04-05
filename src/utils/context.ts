@@ -43,7 +43,7 @@ const getUser = async (token: string) => {
     } catch (error: any) {
         consoleMessageResult(false, 'Fetch user', 'Couldn\'t fetch the logged user');
         throw new GraphQLError(error, {
-            extensions: { code: 'YOUR_ERROR_CODE' },
+            extensions: { code: 'INTERNAL_SERVER_ERROR' },
         });
     };
 };

@@ -36,7 +36,7 @@ if (!cached) {
     cached = global.mongodb = { conn: null, promise: null };
 };
 
-export let db: any;
+export let db: Db;
 
 export const initDb = async () => {
     if (cached.conn) {
@@ -44,7 +44,8 @@ export const initDb = async () => {
         return cached.conn;
     };
 
-    if (!cached.promise) {
+    // Try to reconnect to database if there was no connection to the Database and it is requested
+    if (!cached.promise || !cached.conn) {
         // Console attempt to connect
         console.log('\x1b[90m%s\x1b[0m', '--------------------------');
         consoleMessage('Attempt', 'initDb', 'Establishing new database connection');
@@ -54,12 +55,13 @@ export const initDb = async () => {
         //     useUnifiedTopology: true,
         // };
 
-        cached.promise = MongoClient.connect(process.env.DB_CONN_STRING as string).then((client) => {
-            return {
-                client,
-                db: client.db(process.env.DB_NAME)
-            };
-        });
+        cached.promise = MongoClient.connect(process.env.DB_CONN_STRING as string)
+            .then((client) => {
+                return {
+                    client,
+                    db: client.db(process.env.DB_NAME)
+                };
+            });
     };
 
     try {
@@ -76,8 +78,9 @@ export const initDb = async () => {
         consoleMessageResult(false, 'initDb', 'Failed attempt to connect to MongoDb');
         console.log('');
         console.log('\x1b[35m%s\x1b[0m', '# Details:');
-        console.error(error);
+        console.log(error);
         console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+        console.log('');
 
         return cached.conn;
     };

@@ -1,7 +1,7 @@
 // Modules
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { DateTime } from "luxon";
+import { DateTime } from 'luxon';
 import { ObjectId } from 'mongodb';
 import { GraphQLError } from 'graphql';
 
@@ -54,7 +54,7 @@ export const signUp = async (
 
     if (emailValidation.valid) {
         const randColor = () => {
-            return "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0').toUpperCase();
+            return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0').toUpperCase();
         };
 
         const user = {
@@ -106,29 +106,52 @@ export const login = async (_: any, { email, password }: { email: string, passwo
         await initDb();
     };
 
-    const user = await db.collection('users').findOne({ 'email.current': email });
-    if (!user) throw new GraphQLError('User not found', {
-        extensions: {
-            code: 'USER_NOT_FOUND',
-            argumentName: 'Not in Database'
-            //? Custom error message http details
-            // http: {
-            //     status: 204,
-            //     headers: new Map([
-            //         ['some-header', 'it was bad'],
-            //         ['another-header', 'seriously']
-            //     ])
-            // }
-        }
-    });
+    try {
+        const user = await db.collection('users').findOne({ 'email.current': email });
 
-    // const valid = await bcrypt.compare(password, user.password.hash);
-    // if (!valid) throw new AuthenticationError('wrong credentials');
+        if (!user) return new GraphQLError('User not found', {
+            extensions: {
+                code: 'USER_NOT_FOUND',
+                argumentName: 'Not in Database'
+                //? Custom error message http details
+                // http: {
+                //     status: 204,
+                //     headers: new Map([
+                //         ['some-header', 'it was bad'],
+                //         ['another-header', 'seriously']
+                //     ])
+                // }
+            }
+        });
 
-    console.log('\x1b[90m%s\x1b[0m', '--------------------------');
-    consoleMessage('Mutations Task', 'authorizationHeader', `Attempt to create authorization`);
-    const token = authorizationHeader(user._id, ctx);
-    console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+        // const valid = await bcrypt.compare(password, user.password.hash);
+        // if (!valid) throw new AuthenticationError('wrong credentials');
 
-    return token;
+        console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+        consoleMessage('Mutations Task', 'authorizationHeader', `Attempt to create authorization`);
+        const token = authorizationHeader(user._id, ctx);
+        console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+
+        return token;
+    } catch (error: any) {
+        console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+        consoleMessageResult(false, 'login', `Failed to connect to the Database`);
+        console.log('\x1b[90m%s\x1b[0m', '--------------------------');
+
+        if (!db) {
+            throw new GraphQLError('Server Database is temporary unreachable.', {
+                extensions: {
+                    code: 'DATABASE_NOT_CONNECTED',
+                    argumentName: 'Database connection missing'
+                }
+            });
+        } else {
+            throw new GraphQLError('An unknown error occurred in the server.', {
+                extensions: {
+                    code: 'INTERNAL_SERVER_ERROR',
+                    argumentName: 'Unknown error'
+                }
+            });
+        };
+    };
 };
